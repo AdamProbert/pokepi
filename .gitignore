@@ -23,3 +23,6 @@ roms/
 *.key
 *.pem
 id_*
+
+# Full-size photos with location data stay local
+docs/build-log/originals/
