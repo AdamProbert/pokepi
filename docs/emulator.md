@@ -38,7 +38,7 @@ The pad is an I2C chip with no interrupt line wired, so it has to be polled. `po
 | Minus | SELECT | Select |
 | HAT A (left, top) | TL | L |
 | HAT X (right, top) | TR | R |
-| HAT B (left, bottom) | MODE | Menu |
+| HAT B (left, bottom) | MODE | Menu (hold 3 s to shut down) |
 | HAT Y (right, bottom) | THUMBL | Fast forward toggle |
 
 Save states, load states and quitting a game are all in the menu.
@@ -53,6 +53,16 @@ RetroArch 1.20 and the cores come from the trixie repos (`retroarch`, `libretro-
 
 `pokepi-retroarch.service` starts it on tty1 at boot and restarts it if it quits.
 
+## Power
+
+There are 3 ways to shut down safely.
+
+- **Hold HAT B for 3 seconds.** The pad LEDs fill up as a countdown, let go before all 4 are lit to cancel. This is handled by the pad service, which runs as root.
+- **RetroArch's menu**, Main Menu then Shutdown. RetroArch runs as adam, so a polkit rule (`setup/50-pokepi-power.rules`) lets adam power off and reboot without a password.
+- **Low battery.** `pokepi/power_monitor.py` reads the UPS every 5 seconds. If the battery stays under 3.30 V for 30 seconds while discharging, it powers off. 3.30 V is roughly 10% left on this LiPo, so there's some margin before the UPS's own cutoff. It also writes the latest reading to `/run/pokepi/battery.json`, which a battery icon could use later.
+
+After the Pi has shut down the UPS still powers it, so flip the switch on the UPS once the green light stops flashing. `setup/install-power.sh` installs all of this.
+
 ## Setting it up from scratch
 
 After the [bring-up steps](bring-up.md), copy the repo to `~/pokepi` on the Pi and run these from there. The 2 that change boot settings reboot the Pi when they finish.
@@ -63,6 +73,7 @@ bash setup/install-display.sh          # reboots
 bash setup/console-on-panel.sh         # reboots
 bash setup/install-retroarch-config.sh
 bash setup/enable-autostart.sh
+bash setup/install-power.sh
 ```
 
 Then copy your ROMs into `~/roms`.
@@ -72,4 +83,3 @@ Then copy your ROMs into `~/roms`.
 - Sound. The Zero 2 W has no audio out on its own, so it needs a small I2S amp and speaker.
 - Measuring the real frame rate on GBA games.
 - Showing the battery level somewhere, probably a small overlay.
-- A safe shutdown when the battery gets low.

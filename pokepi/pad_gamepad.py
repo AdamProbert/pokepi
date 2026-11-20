@@ -8,6 +8,7 @@ else) picks up like a USB controller.
 Run: sudo python3 pad_gamepad.py   (needs /dev/uinput, the systemd service runs it as root)
 """
 import signal
+import subprocess
 import sys
 import time
 
@@ -49,6 +50,11 @@ HAT_KEYS = {
 
 DEVICE_NAME = "Pokepi Pad"
 
+# Hold the menu button (HAT B) this long to shut down. The pad LEDs fill up as a countdown,
+# let go before they're all lit to cancel.
+SHUTDOWN_PIN = 6
+SHUTDOWN_HOLD_S = 3.0
+
 
 def setup_pad(bus):
     led_mask = sum(1 << b for b in LED_BITS)
@@ -87,6 +93,8 @@ def main():
 
     state = {}
     errors = 0
+    hold_start = None
+    leds_shown = 1
     period = 1.0 / POLL_HZ
     while running:
         start = time.monotonic()
@@ -118,6 +126,31 @@ def main():
                 changed = True
         if changed:
             ui.syn()
+
+        # Long press to shut down
+        if pressed[HAT_KEYS[SHUTDOWN_PIN]]:
+            if hold_start is None:
+                hold_start = start
+            held = start - hold_start
+            leds = min(4, int(held / SHUTDOWN_HOLD_S * 5))
+            pattern = (1 << leds) - 1 if leds else 0b0001
+            if pattern != leds_shown:
+                try:
+                    set_leds(bus, pattern)
+                except OSError:
+                    pass
+                leds_shown = pattern
+            if held >= SHUTDOWN_HOLD_S:
+                print("shutdown button held, powering off", flush=True)
+                subprocess.run(["systemctl", "poweroff"])
+                break
+        elif hold_start is not None:
+            hold_start = None
+            try:
+                set_leds(bus, 0b0001)
+            except OSError:
+                pass
+            leds_shown = 0b0001
 
         time.sleep(max(0.0, period - (time.monotonic() - start)))
 

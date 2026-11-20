@@ -1,0 +1,10 @@
+[Unit]
+Description=Pokepi low battery shutdown
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/pokepi/power_monitor.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
