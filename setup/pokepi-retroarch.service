@@ -1,0 +1,20 @@
+[Unit]
+Description=Pokepi RetroArch on the panel
+After=pokepi-pad.service systemd-user-sessions.service
+Wants=pokepi-pad.service
+Conflicts=getty@tty1.service
+
+[Service]
+User=adam
+PAMName=login
+TTYPath=/dev/tty1
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+WorkingDirectory=/home/adam
+ExecStart=/usr/bin/retroarch
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
