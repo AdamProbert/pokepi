@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.log
+.venv/
+venv/
+
+# Games and saves stay off GitHub
+roms/
+*.gb
+*.gbc
+*.gba
+*.nes
+*.sfc
+*.smc
+*.zip
+*.7z
+*.sav
+*.srm
+*.state*
+
+# Secrets
+.env
+*.key
+*.pem
+id_*
