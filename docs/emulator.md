@@ -49,7 +49,7 @@ Save states, load states and quitting a game are all in the menu.
 
 RetroArch 1.20 and the cores come from the trixie repos (`retroarch`, `libretro-gambatte`, `libretro-mgba`). It uses the `gl` video driver with the `kms` context, which renders on the VideoCore GPU (OpenGL ES 2.0) and shows it on the panel. RGUI is the menu and the game picker.
 
-`config/retroarch.cfg` only has the settings that differ from the defaults. Audio is off for now since there's no speaker yet. Saves go in `~/saves`, states in `~/states` and it auto-saves a state when you quit a game.
+`config/retroarch.cfg` only has the settings that differ from the defaults. Audio goes to the I2S amp, see [audio.md](audio.md). Saves go in `~/saves`, states in `~/states` and it auto-saves a state when you quit a game.
 
 `pokepi-retroarch.service` starts it on tty1 at boot and restarts it if it quits.
 
@@ -80,6 +80,6 @@ Then copy your ROMs into `~/roms`.
 
 ## Still to do
 
-- Sound. The Zero 2 W has no audio out on its own, so it needs a small I2S amp and speaker.
+- Sound. Wiring and setup for the I2S amp and speaker are in [audio.md](audio.md).
 - Measuring the real frame rate on GBA games.
 - Showing the battery level somewhere, probably a small overlay.

@@ -26,3 +26,4 @@ id_*
 
 # Full-size photos with location data stay local
 docs/build-log/originals/
+pi-logs/

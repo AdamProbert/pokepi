@@ -96,3 +96,13 @@ The INA219 is big-endian, so the bytes need swapping after an smbus word read. B
 | Backlight | 13 |
 | Button A / B / X / Y | 5 / 6 / 16 / 24 |
 | RGB LED R / G / B | 17 / 27 / 22 |
+
+## WiFi lost after power cuts
+
+On this Raspberry Pi OS (trixie, set up by Imager through cloud-init) WiFi lives in netplan, and NetworkManager writes its own `90-NM-*.yaml` copies into `/etc/netplan`. Pulling the power shortly after boot left both of them at 0 bytes, and one empty netplan file stops netplan from generating any connections, so the Pi boots fine but never joins WiFi.
+
+`setup/netfix.sh` lives on the boot partition as `/boot/firmware/netfix.sh` and cloud-init runs it early on every boot (a `bootcmd` in `user-data`). It turns on persistent journald logs, moves empty or unreadable netplan files to `/var/backups/netplan-broken`, rebuilds the WiFi config from `/boot/firmware/network-config` if no WiFi connection is left, and restarts NetworkManager. It logs each boot to `/boot/firmware/netfix.log`, which you can read by putting the SD card in a PC.
+
+If the Pi is ever stuck offline anyway, change the instance id in both `cmdline.txt` (`ds=nocloud;i=...`) and `meta-data` on the boot partition. cloud-init then treats the next boot as a first boot and rewrites the network config (same user, password and WiFi; `ssh_deletekeys: false` keeps the host keys).
+
+Shutting down properly (hold HAT B for 3 s, or `sudo poweroff`) avoids it.
