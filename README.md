@@ -42,6 +42,10 @@ Full steps are in [docs/bring-up.md](docs/bring-up.md).
 - `setup/` also has the install scripts for the screen driver, pad service and RetroArch.
 - `config/` has the RetroArch settings and pad mapping.
 
+## Common commands
+
+The `justfile` has shortcuts for the usual jobs from the PC, such as `just ssh`, `just sync`, `just setup enable-audio`, `just roms "game.gbc"`, `just restart-retroarch`, `just status` and `just netfix-log`. Run `just` to list them all. It needs [just](https://github.com/casey/just) (`winget install Casey.Just`) and runs its recipes in Git Bash.
+
 ## Running the tests
 
 Copy the tests across and run them with the venv's Python.
