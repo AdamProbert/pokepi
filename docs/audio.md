@@ -59,4 +59,11 @@ bash pi-tests/test_speaker.sh
 
 ## RetroArch
 
-`config/retroarch.cfg` uses the ALSA driver on the default device, at 48 kHz with 64 ms latency. Reinstall the config with `bash setup/install-retroarch-config.sh` and restart `pokepi-retroarch.service`. If the sound crackles, raise `audio_latency` to 96 or 128.
+`config/retroarch.cfg` uses the `alsathread` driver on the default device at 48 kHz with 128 ms latency, and the dmix buffer in `setup/asound.conf` is 8192 frames (Adafruit's recommended size for this amp). Reinstall with `bash setup/install-retroarch-config.sh` and restart `pokepi-retroarch.service`.
+
+Getting smooth sound took a few changes together. With the plain `alsa` driver, 64 ms latency and a 4096 frame dmix buffer, music was badly choppy even in Game Boy games where the CPU was 90% idle:
+
+- `video_vsync = "false"` and `video_threaded = "true"`. The SPI panel tops out around 50 fps, and waiting on it held the emulator below 60, starving the audio.
+- `audio_driver = "alsathread"`, `audio_latency = "128"` and the bigger dmix buffer.
+
+GBA is a separate problem: mGBA runs Pokémon Emerald at 100% of one core on the Zero 2 W, so it can still stutter there. `mgba_frameskip = "auto"` and `mgba_skip_bios = "ON"` are set in `~/.config/retroarch/config/mGBA/mGBA.opt` (copy in `config/mGBA.opt`).
