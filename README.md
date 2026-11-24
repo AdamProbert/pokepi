@@ -1,6 +1,6 @@
 # Pokepi
 
-Pokepi is a handheld games console I'm designing, building and programming myself. It's a Raspberry Pi Zero 2 W in a 3D printed case with a small SPI screen, an I2C gamepad and a battery HAT.
+Pokepi is a handheld games console I'm designing, building and programming myself. It's a Raspberry Pi Zero 2 W in a 3D printed case with a small SPI screen, an I2C gamepad, a battery HAT and a speaker.
 
 This repo has the setup scripts, test scripts and notes from getting the hardware working. The case CAD isn't in here (yet).
 
@@ -12,8 +12,12 @@ This repo has the setup scripts, test scripts and notes from getting the hardwar
 | Pimoroni Display HAT Mini | 2.0" 320x240 IPS screen (ST7789), 4 buttons, RGB LED | SPI0 CE1, DC on GPIO9, backlight on GPIO13 |
 | Pimoroni Qw/ST Pad | D-pad, ABXY, plus and minus, 4 LEDs (TCA9555 expander) | I2C bus 1, address 0x21 |
 | Waveshare UPS HAT (C) | Battery, charging, voltage and current (INA219) | I2C bus 1, address 0x43 |
+| MAX98357A I2S amp | 3 W class D mono amp for the speaker | I2S on GPIO 18, 19 and 21, plus 5V and GND |
+| 20 x 30 mm speaker | 8 ohm 1 W, 4.6 mm thick | Bare leads into the amp's terminals |
 
 The screen isn't HDMI, everything that draws to it goes over SPI.
+
+The full parts list, including the case screws and inserts, is in [docs/parts.md](docs/parts.md). Audio wiring is in [docs/audio.md](docs/audio.md).
 
 ## Software on the Pi
 
