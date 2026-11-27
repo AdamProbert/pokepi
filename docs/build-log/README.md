@@ -61,3 +61,23 @@ The stack was deeper than the case allowed, so the halves don't close. The stack
 The back screws sit proud. The next version has deeper counterbores. The heat-set insert slots fitted perfectly.
 
 All of these are fixed in the next version of the case.
+
+## 2026-11-27
+
+Every version of the case so far, V0 in yellow and V2 to V5 in black, with the pad brackets and D-pad test keys in front. I write on each test print with acrylic markers as I try it, so every old version still has its notes on it.
+
+![Every case revision](photos/2026-11-27-revisions-lineup.jpg)
+
+The current build opened up. The front shell has the pad held in by its bracket, the back has the screen stack, the amp and the speaker.
+
+![Current build opened up](photos/2026-11-27-build-opened.jpg)
+
+The case design is Strata, a chamfered slab with 5 speaker slashes printed as separate inserts.
+
+![Strata concept](../images/strata-concept.png)
+
+The D-pad has been the hardest part. The one-piece rocker never pressed its switches, so these were the 5 options after it. I went with the pinwheel wedges, without the centre hub.
+
+![D-pad options](../images/dpad-concepts.png)
+
+![Pinwheel D-pad in CAD](../images/keys-preview.png)
